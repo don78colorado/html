@@ -1,0 +1,58 @@
+<html>
+    <body>
+        <h1>This is my game</h1>
+        <p>below is my canvas</p>
+        <canvas width="800" height="600" id="myCanvas"></canvas>
+        <p>above is my canvas</p>
+    </body>
+
+    <script>
+        var ballX = 20;
+        var ballY = 20;
+        var ballRadius = 10;
+        var ballSpeed = 10;
+        var ballDX = ballSpeed;
+        var ballDY = ballSpeed;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        window.onload = function () {
+
+            FPS = 60;
+            setInterval(loop, 1000/FPS);
+        }
+
+        function loop() {
+            drawEverything();
+            moveEverything();
+        }
+
+        function moveEverything() {
+            console.log("moveEverything()");
+            if(ballX > canvas.width || ballX < 0)
+                ballDX *= -1;
+            if(ballY > canvas.height || ballY < 0)
+                ballDY *= -1;
+            ballX += ballDX;
+            ballY = ballY + ballDY;
+        }
+
+        function drawEverything() {
+            // draw background
+            var width = canvas.width;
+            var height = canvas.height;
+            var grd = ctx.createLinearGradient(0,0,width,height);
+            grd.addColorStop(0, "black");
+            grd.addColorStop(1, "darkblue");
+            ctx.fillStyle = grd;
+            ctx.fillRect(0,0,width,height);
+            
+            // draw ball
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(ballX,ballY,ballRadius,0,2*Math.PI)
+            //ctx.fillRect(ballX, ballY, ballRadius, ballRadius);
+            ctx.fill();
+        }
+    </script>
+</html>
