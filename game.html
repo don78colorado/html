@@ -31,7 +31,7 @@
         var player2Score = 0;
 
         function mouseMoveHandler(evt) {
-            paddle1Y = evt.clientY - canvas.getBoundingClientRect().top - document.documentElement.scrollTop;
+            paddle1Y = evt.clientY - canvas.getBoundingClientRect().top - document.documentElement.scrollTop - paddleHeight/2;
         }
 
         window.onload = function () {
