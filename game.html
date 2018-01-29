@@ -27,9 +27,17 @@
         var paddle2Y = paddle1Y;
         var paddleSpeed = 5;
 
+        var player1Score = 0;
+        var player2Score = 0;
+
+        function mouseMoveHandler(evt) {
+            paddle1Y = evt.clientY - canvas.getBoundingClientRect().top - document.documentElement.scrollTop;
+        }
+
         window.onload = function () {
             const FPS = 60;
             setInterval(loop, 1000/FPS);
+            canvas.addEventListener('mousemove', mouseMoveHandler);
         }
 
         function loop() {
@@ -45,14 +53,18 @@
         function moveEverything() {
             //move ball
             if(ballX > canvas.width) { // ball has hit right edge
-                if(ballY>paddle2Y+paddleHeight || ballY < paddle2Y)
+                if(ballY>paddle2Y+paddleHeight || ballY < paddle2Y) {
+                    player1Score++;
                     ballReset();
+                }
                 else
                     ballDX *= -1;
             }
             else if(ballX < 0) { // ball has hit left edge
-                if(ballY>paddle1Y+paddleHeight || ballY < paddle1Y)
+                if(ballY>paddle1Y+paddleHeight || ballY < paddle1Y) {
+                    player2Score++;
                     ballReset();
+                }
                 else
                     ballDX *= -1;
             }
@@ -62,6 +74,7 @@
             ballY = ballY + ballDY;
 
             //move paddle1
+            /*
             if (ballDX<0) {
                 paddle1Center = paddle1Y + paddleHeight/2;
                 if(paddle1Center>ballY) {
@@ -70,6 +83,7 @@
                     paddle1Y += paddleSpeed;
                 }
             }
+            */
 
             //move paddle2
             if (ballDX>0) {
@@ -105,6 +119,10 @@
             ctx.fillStyle = 'red';
             ctx.fillRect(paddle2X, paddle2Y, paddleWidth, paddleHeight);
 
+            // draw scores
+            ctx.fillStyle = 'yellow';
+            ctx.fillText(player1Score, 100, 100);
+            ctx.fillText(player2Score, canvas.width-100, 100);
         }
     </script>
 </html>
