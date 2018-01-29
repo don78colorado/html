@@ -2,23 +2,33 @@
     <body>
         <h1>This is my game</h1>
         <p>below is my canvas</p>
-        <canvas width="800" height="600" id="myCanvas"></canvas>
+        <canvas width="600" height="400" id="myCanvas"></canvas>
         <p>above is my canvas</p>
     </body>
 
     <script>
-        var ballX = 20;
-        var ballY = 20;
-        var ballRadius = 10;
-        var ballSpeed = 10;
-        var ballDX = ballSpeed;
-        var ballDY = ballSpeed;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
-        window.onload = function () {
+        // ball variables
+        var ballX = 20;
+        var ballY = 20;
+        var ballRadius = 5;
+        var ballSpeed = 5;
+        var ballDX = ballSpeed;
+        var ballDY = ballSpeed;
 
-            FPS = 60;
+        //paddle variables
+        var paddleHeight = 50;
+        var paddleWidth = 5;
+        const paddle1X = 0;
+        const paddle2X = canvas.width-paddleWidth;
+        var paddle1Y = (canvas.height-paddleHeight)/2;
+        var paddle2Y = paddle1Y;
+        var paddleSpeed = 5;
+
+        window.onload = function () {
+            const FPS = 60;
             setInterval(loop, 1000/FPS);
         }
 
@@ -27,14 +37,49 @@
             moveEverything();
         }
 
+        function ballReset() {
+            ballX = canvas.width/2;
+            ballY = canvas.height/2;
+        }
+
         function moveEverything() {
-            console.log("moveEverything()");
-            if(ballX > canvas.width || ballX < 0)
-                ballDX *= -1;
+            //move ball
+            if(ballX > canvas.width) { // ball has hit right edge
+                if(ballY>paddle2Y+paddleHeight || ballY < paddle2Y)
+                    ballReset();
+                else
+                    ballDX *= -1;
+            }
+            else if(ballX < 0) { // ball has hit left edge
+                if(ballY>paddle1Y+paddleHeight || ballY < paddle1Y)
+                    ballReset();
+                else
+                    ballDX *= -1;
+            }
             if(ballY > canvas.height || ballY < 0)
                 ballDY *= -1;
             ballX += ballDX;
             ballY = ballY + ballDY;
+
+            //move paddle1
+            if (ballDX<0) {
+                paddle1Center = paddle1Y + paddleHeight/2;
+                if(paddle1Center>ballY) {
+                    paddle1Y -= paddleSpeed;
+                } else if (paddle1Y<ballY) {
+                    paddle1Y += paddleSpeed;
+                }
+            }
+
+            //move paddle2
+            if (ballDX>0) {
+                paddle2Center = paddle2Y + paddleHeight/2;
+                if(paddle2Center>ballY) {
+                    paddle2Y -= paddleSpeed;
+                } else if (paddle2Y<ballY) {
+                    paddle2Y += paddleSpeed;
+                }
+            }
         }
 
         function drawEverything() {
@@ -46,13 +91,20 @@
             grd.addColorStop(1, "darkblue");
             ctx.fillStyle = grd;
             ctx.fillRect(0,0,width,height);
-            
+
             // draw ball
             ctx.fillStyle = 'white';
             ctx.beginPath();
             ctx.arc(ballX,ballY,ballRadius,0,2*Math.PI)
             //ctx.fillRect(ballX, ballY, ballRadius, ballRadius);
             ctx.fill();
+
+            //draw paddles
+            ctx.fillStyle = 'green';
+            ctx.fillRect(paddle1X, paddle1Y, paddleWidth, paddleHeight);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(paddle2X, paddle2Y, paddleWidth, paddleHeight);
+
         }
     </script>
 </html>
