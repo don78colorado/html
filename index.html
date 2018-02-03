@@ -37,7 +37,7 @@
         window.onload = function () {
             const FPS = 60;
             setInterval(loop, 1000/FPS);
-            canvas.addEventListener('mousemove', mouseMoveHandler);
+            //canvas.addEventListener('mousemove', mouseMoveHandler);
         }
 
         function loop() {
@@ -74,7 +74,7 @@
             ballY = ballY + ballDY;
 
             //move paddle1
-            /*
+            
             if (ballDX<0) {
                 paddle1Center = paddle1Y + paddleHeight/2;
                 if(paddle1Center>ballY) {
@@ -83,7 +83,7 @@
                     paddle1Y += paddleSpeed;
                 }
             }
-            */
+            
 
             //move paddle2
             if (ballDX>0) {
